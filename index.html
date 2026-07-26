@@ -251,6 +251,13 @@
   .cert-issuer{ color:var(--text-1); font-size:0.92rem; margin-bottom:22px; }
   .cert-meta{ display:flex; justify-content:space-between; border-top:1px solid var(--line-soft); padding-top:16px; font-family:'JetBrains Mono'; font-size:0.71rem; color:var(--text-2); }
   .cert-meta b{ color:var(--text-0); display:block; font-family:'Inter'; font-size:0.86rem; margin-top:4px; font-weight:600; }
+  .verify-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:20px;
+    font-family:'JetBrains Mono'; font-size:0.8rem; font-weight:500; color:var(--gold);
+    text-decoration:none; border-bottom:1px solid var(--gold-dim); padding-bottom:2px;
+    transition:border-color .2s ease;
+  }
+  .verify-link:hover{ border-color:var(--gold); }
 
   .stack-group{ margin-bottom:26px; }
   .stack-group:last-child{ margin-bottom:0; }
@@ -261,6 +268,14 @@
     padding:9px 15px; border-radius:8px; transition:border-color .2s ease, color .2s ease;
   }
   .stack-chip:hover{ border-color:var(--pulse); color:var(--pulse); }
+  .stack-chip-detailed{
+    display:flex; flex-direction:column; gap:5px; max-width:280px;
+    background:var(--bg-2); border:1px solid var(--line); border-radius:9px;
+    padding:12px 15px; transition:border-color .2s ease;
+  }
+  .stack-chip-detailed:hover{ border-color:var(--pulse-dim); }
+  .stack-chip-detailed .name{ font-size:0.86rem; color:var(--text-0); font-weight:600; }
+  .stack-chip-detailed .desc{ font-size:0.78rem; color:var(--text-2); line-height:1.5; }
 
   /* ---------- HOW IT WORKS ---------- */
   .how-grid{ display:flex; align-items:flex-start; gap:18px; }
@@ -362,7 +377,7 @@
         <h1 class="name">whale<span class="accent">_</span>sys</h1>
         <p class="full-name">Anthony Mwendwa</p>
         <p class="title-line">
-          Nurse-midwife turned <strong>AI-assisted developer and full-stack builder</strong> — building
+          Registered nurse-midwife and <strong>AI-assisted developer &amp; full-stack builder</strong> — building
           secure, production-grade software with the same precision once reserved for the bedside.
         </p>
         <div class="cta-row">
@@ -462,7 +477,7 @@
     <div class="section-head">
       <span class="section-tag">Services Offered</span>
       <h2 class="section-title">Core areas of professional practice.</h2>
-      <p class="section-sub">Five disciplines, one security-first standard of execution — every service
+      <p class="section-sub">Six disciplines, one security-first standard of execution — every service
       booked directly through Telegram or WhatsApp, no separate booking system required.</p>
     </div>
 
@@ -476,8 +491,8 @@
       <div class="service-card">
         <span class="service-num">02</span>
         <h3>Full-Stack &amp; Custom Website Development</h3>
-        <p>End-to-end web applications built on modern frameworks, deployed to production, and maintained
-        for reliability — from single-page sites to full custom platforms.</p>
+        <p>End-to-end web applications built through AI-assisted workflows on modern frameworks, deployed
+        to production, and maintained for reliability — from single-page sites to full custom platforms.</p>
       </div>
       <div class="service-card">
         <span class="service-num">03</span>
@@ -493,6 +508,12 @@
       </div>
       <div class="service-card">
         <span class="service-num">05</span>
+        <h3>Custom Telegram Bot Development</h3>
+        <p>Telegram bots built to spec — from payment and command flows to natural-language interfaces
+        and admin dashboards — tailored to exactly what you need, not a generic template.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">06</span>
         <h3>Crypto Investing &amp; Trading</h3>
         <p>Active crypto investor and trader across major assets — including BTC, gold (XAUUSD), and
         forex pairs like EURUSD — using a structured SMC/ICT market-structure methodology and on-chain
@@ -552,6 +573,7 @@
           <div>Credential<b>CLLMSP</b></div>
           <div>Status<b style="color:var(--pulse)">Active</b></div>
         </div>
+        <a class="verify-link" href="https://courses.redteamleaders.com/exam-completion/2ca19ce212ab09d8" target="_blank" rel="noopener">Verify Credential →</a>
       </div>
 
       <div>
@@ -564,34 +586,80 @@
           </div>
         </div>
         <div class="stack-group">
-          <h4>Deployment &amp; Hosting</h4>
+          <h4>Frontend</h4>
           <div class="stack-chips">
-            <span class="stack-chip">Vercel</span>
-            <span class="stack-chip">Railway</span>
-            <span class="stack-chip">Render</span>
+            <div class="stack-chip-detailed">
+              <span class="name">Next.js 14 (App Router)</span>
+              <span class="desc">Powers every production site and dashboard, from Whale Enterprise to Axon Pulse.</span>
+            </div>
+            <div class="stack-chip-detailed">
+              <span class="name">Custom CSS (No Framework Dependencies)</span>
+              <span class="desc">Hand-built, zero-dependency styling for full control over performance and design.</span>
+            </div>
+            <span class="stack-chip">PWA (Progressive Web App)</span>
+            <span class="stack-chip">Responsive / Mobile-First UI</span>
           </div>
         </div>
         <div class="stack-group">
-          <h4>Backend &amp; Database</h4>
+          <h4>Backend</h4>
           <div class="stack-chips">
-            <span class="stack-chip">Next.js (Serverless API Routes)</span>
-            <span class="stack-chip">Supabase</span>
-            <span class="stack-chip">Vercel KV</span>
+            <div class="stack-chip-detailed">
+              <span class="name">Next.js (Serverless API Routes)</span>
+              <span class="desc">Handles all backend logic for WHALE_SYS — payments, splits, and command parsing — no separate server.</span>
+            </div>
+          </div>
+        </div>
+        <div class="stack-group">
+          <h4>Database</h4>
+          <div class="stack-chips">
+            <div class="stack-chip-detailed">
+              <span class="name">Supabase</span>
+              <span class="desc">Primary database across Axon Merchant, axonnurse, and other relational-data projects.</span>
+            </div>
+            <div class="stack-chip-detailed">
+              <span class="name">Vercel KV</span>
+              <span class="desc">Entire data layer for WHALE_SYS — chosen after hitting Supabase free-tier limits.</span>
+            </div>
           </div>
         </div>
         <div class="stack-group">
           <h4>AI</h4>
           <div class="stack-chips">
-            <span class="stack-chip">Groq AI (Llama 3.3 70B)</span>
+            <div class="stack-chip-detailed">
+              <span class="name">Groq AI (Llama 3.3 70B)</span>
+              <span class="desc">Powers the natural-language command layer — parses intent, but never moves money directly.</span>
+            </div>
+          </div>
+        </div>
+        <div class="stack-group">
+          <h4>Deployment &amp; Hosting</h4>
+          <div class="stack-chips">
+            <div class="stack-chip-detailed">
+              <span class="name">Vercel</span>
+              <span class="desc">Primary hosting and deploy target, connected directly to GitHub.</span>
+            </div>
+            <div class="stack-chip-detailed">
+              <span class="name">CI/CD (GitHub → Vercel)</span>
+              <span class="desc">Every push triggers an automatic production deploy — no manual build step.</span>
+            </div>
+            <span class="stack-chip">Railway</span>
+            <span class="stack-chip">Render</span>
           </div>
         </div>
         <div class="stack-group">
           <h4>Integrations</h4>
           <div class="stack-chips">
+            <div class="stack-chip-detailed">
+              <span class="name">M-Pesa Daraja API</span>
+              <span class="desc">Direct integration for STK push and C2B payment callbacks across WHALE_SYS and Axonarchitects.</span>
+            </div>
+            <div class="stack-chip-detailed">
+              <span class="name">Pretium (Crypto Agent / MCP)</span>
+              <span class="desc">Reverse-engineered JSON-RPC integration with Pretium's MCP server for crypto-to-fiat off-ramping.</span>
+            </div>
             <span class="stack-chip">Telegram Bot API</span>
-            <span class="stack-chip">M-Pesa / STK Push</span>
             <span class="stack-chip">PayHero</span>
-            <span class="stack-chip">Pretium (Crypto Agent / MCP)</span>
+            <span class="stack-chip">Webhook Handlers</span>
             <span class="stack-chip">TradingView Pine Script</span>
             <span class="stack-chip">Make.com Automation</span>
             <span class="stack-chip">Binance / TwelveData APIs</span>
