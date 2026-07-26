@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study: Whale Enterprise — whale_sys</title>
+<meta name="description" content="How WHALE_SYS, a Telegram-native M-Pesa payment and savings system, was built and deployed entirely from an Android phone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#080a0e; --bg-1:#0d1015; --bg-2:#12161c;
+    --line:#1e2530; --line-soft:#161b23;
+    --text-0:#eef1f5; --text-1:#9aa3b1; --text-2:#5c6673;
+    --pulse:#22e6a0; --pulse-dim:#22e6a038;
+    --gold:#d4af6a; --gold-dim:#d4af6a38;
+    --radius:12px; --maxw:820px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:
+      radial-gradient(1000px 560px at 84% -10%, rgba(34,230,160,0.06), transparent 60%),
+      radial-gradient(800px 460px at 4% 4%, rgba(212,175,106,0.04), transparent 55%),
+      var(--bg-0);
+    color:var(--text-0); font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:'Sora', sans-serif; letter-spacing:-0.02em; margin:0; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color:inherit; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+
+  nav{
+    position:sticky; top:0; z-index:50; background:rgba(8,10,14,0.85);
+    backdrop-filter:blur(14px); border-bottom:1px solid var(--line-soft);
+  }
+  .nav-inner{ max-width:var(--maxw); margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .back-link{ font-family:'JetBrains Mono'; font-size:0.82rem; color:var(--text-1); text-decoration:none; display:flex; align-items:center; gap:8px; }
+  .back-link:hover{ color:var(--pulse); }
+  .brand{ display:flex; align-items:center; gap:9px; font-family:'Sora'; font-weight:700; font-size:0.98rem; }
+  .brand-dot{ width:7px; height:7px; border-radius:50%; background:var(--pulse); box-shadow:0 0 8px var(--pulse); }
+
+  header.hero{ padding:64px 0 40px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:9px; font-family:'JetBrains Mono'; font-size:0.74rem;
+    letter-spacing:0.08em; color:var(--pulse); border:1px solid var(--pulse-dim);
+    background:rgba(34,230,160,0.05); padding:6px 13px; border-radius:100px; margin-bottom:22px;
+  }
+  h1.title{ font-size:clamp(1.9rem, 5vw, 2.6rem); font-weight:800; line-height:1.15; }
+  .subtitle{ color:var(--text-1); font-size:1.05rem; margin-top:16px; line-height:1.7; max-width:600px; }
+  .status-live{ display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono'; font-size:0.78rem; color:var(--pulse); margin-top:26px; }
+  .status-live::before{ content:''; width:7px; height:7px; border-radius:50%; background:var(--pulse); box-shadow:0 0 8px var(--pulse); }
+  .btn-live{
+    display:inline-flex; margin-top:26px; font-family:'JetBrains Mono'; font-size:0.85rem; font-weight:600;
+    padding:13px 22px; border-radius:9px; background:var(--gold); color:#1a1204; text-decoration:none;
+  }
+
+  section{ padding:44px 0; border-top:1px solid var(--line-soft); }
+  .section-tag{ font-family:'JetBrains Mono'; font-size:0.74rem; color:var(--gold); letter-spacing:0.09em; text-transform:uppercase; margin-bottom:16px; display:block; }
+  h2.section-title{ font-size:clamp(1.4rem,3vw,1.8rem); font-weight:700; margin-bottom:20px; }
+  .prose p{ color:var(--text-1); line-height:1.85; font-size:1rem; margin:0 0 18px; }
+  .prose strong{ color:var(--text-0); font-weight:600; }
+  .prose p:last-child{ margin-bottom:0; }
+
+  .stack-list{ display:grid; gap:14px; margin-top:8px; }
+  .stack-item{
+    background:var(--bg-1); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 20px; display:flex; gap:14px; align-items:flex-start;
+  }
+  .stack-item .dot{ width:6px; height:6px; border-radius:50%; background:var(--pulse); margin-top:9px; flex-shrink:0; }
+  .stack-item p{ margin:0; color:var(--text-1); font-size:0.94rem; line-height:1.65; }
+  .stack-item strong{ color:var(--text-0); }
+
+  .impact-panel{
+    background:var(--bg-1); border:1px solid var(--gold-dim); border-radius:var(--radius);
+    padding:32px; position:relative; overflow:hidden;
+  }
+  .impact-panel::before{ content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--pulse), var(--gold)); }
+  .impact-panel p{ color:var(--text-1); font-size:1rem; line-height:1.8; margin:0; }
+  .impact-panel strong{ color:var(--text-0); }
+
+  footer{ padding:36px 0 50px; text-align:center; }
+  footer p{ font-family:'JetBrains Mono'; font-size:0.76rem; color:var(--text-2); margin:0 0 16px; }
+  .footer-back{
+    display:inline-flex; font-family:'JetBrains Mono'; font-size:0.85rem; color:var(--text-0);
+    border:1px solid var(--line); padding:12px 22px; border-radius:8px; text-decoration:none;
+  }
+  .footer-back:hover{ border-color:var(--pulse); color:var(--pulse); }
+
+  @media (max-width:640px){
+    header.hero{ padding:44px 0 30px; }
+    section{ padding:34px 0; }
+    .impact-panel{ padding:24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-dot"></span> whale_sys</div>
+    <a class="back-link" href="index.html">← Back to portfolio</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">CASE STUDY</span>
+    <h1 class="title">WHALE_SYS: A Telegram-Native Payment &amp; Savings System</h1>
+    <p class="subtitle">How a solo developer built a full M-Pesa payment and personal finance system that
+      runs entirely inside a Telegram chat — deployed and maintained end to end from an Android phone.</p>
+    <div class="status-live">LIVE IN PRODUCTION</div>
+    <br>
+    <a class="btn-live" href="https://whale-gamma-pied.vercel.app" target="_blank" rel="noopener">Visit Live Site →</a>
+  </header>
+
+  <section>
+    <span class="section-tag">The Problem</span>
+    <h2 class="section-title">Manual money tracking doesn't scale.</h2>
+    <div class="prose">
+      <p>As a solo developer and trader, I needed a way to collect M-Pesa payments, track my own
+        spending, and build savings discipline — without paying for a fintech SaaS product or
+        maintaining a separate app.</p>
+      <p>Manual M-Pesa tracking meant money in and money out lived in my head, savings never got set
+        aside consistently, and there was no single source of truth for my finances.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-tag">The Solution</span>
+    <h2 class="section-title">A finance system that lives inside chat.</h2>
+    <div class="prose">
+      <p>I built <strong>WHALE_SYS</strong>: a Telegram-native payment and personal finance system that
+        runs entirely through chat. It generates M-Pesa payment links and STK push requests, and — the
+        core feature — <strong>automatically splits every incoming deposit 60/40</strong> into a Main
+        spending account and a Savings account the moment it lands, whether it came from a shared payment
+        link, a self-sent STK push, or a manual Till deposit with no reference at all.</p>
+      <p>No manual step required to start saving; the discipline is built into the money's arrival, not
+        left to willpower afterward.</p>
+      <p>On top of that: category-tagged expense tracking, a weekly savings report, a visual balance
+        dashboard with goal progress, and a crypto off-ramp via Pretium's agent rails for converting
+        stablecoins back to fiat.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-tag">How It Works</span>
+    <h2 class="section-title">Under the hood.</h2>
+    <div class="stack-list">
+      <div class="stack-item">
+        <span class="dot"></span>
+        <p><strong>Next.js 14 serverless functions on Vercel</strong> handle all logic; <strong>Vercel KV
+          (Redis)</strong> is the entire data layer.</p>
+      </div>
+      <div class="stack-item">
+        <span class="dot"></span>
+        <p><strong>PayHero integration</strong> handles M-Pesa STK push and C2B webhook callbacks.</p>
+      </div>
+      <div class="stack-item">
+        <span class="dot"></span>
+        <p><strong>Groq (Llama 3.3)</strong> powers a natural-language command layer, so I can type "send
+          500 to john" instead of memorizing syntax — with strict validation ensuring the AI can suggest
+          an action but never directly move money.</p>
+      </div>
+      <div class="stack-item">
+        <span class="dot"></span>
+        <p>A real <strong>MCP (Model Context Protocol) server integration with Pretium</strong> handles
+          crypto-to-fiat payouts.</p>
+      </div>
+      <div class="stack-item">
+        <span class="dot"></span>
+        <p>Built and deployed <strong>entirely from an Android phone using Termux</strong> — no computer
+          involved at any point.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-tag">Impact</span>
+    <h2 class="section-title">Savings, automated.</h2>
+    <div class="impact-panel">
+      <p>What used to be a mental tally of "how much did I make, how much did I spend, did I save
+        anything" is now <strong>automatic and enforced at the moment money arrives</strong>. Every
+        deposit is already split before I even think about it.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>WHALE_SYS — CASE STUDY</p>
+    <a class="footer-back" href="index.html">← Back to whale_sys portfolio</a>
+  </footer>
+</div>
+
+</body>
+</html>
